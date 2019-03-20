@@ -39,7 +39,6 @@ contract Ethent {
 
     constructor(uint64 _maxAtendees, uint64 _weiToDeposit, address _owner, 
                 address _creator, address _addressToVerify, uint _eventTime) public {
-
         maxAtendees = _maxAtendees; 
         numAtendees = 0;
         weiToDeposit = _weiToDeposit; 
@@ -65,7 +64,7 @@ contract Ethent {
 
     function verifySignIn(uint8 _v, bytes32 _r, bytes32 _s, address _toSign) public view returns(bool) {
         address signer = ecrecover(bytes20(_toSign), _v, _r, _s);
-        return addressToVerify == signer; 
+        return addressToVerify == signer;
     }
 
     function signIn(uint8 _v, bytes32 _r, bytes32 _s) public {
@@ -81,12 +80,10 @@ contract Ethent {
 
     function endEthent() public onlyCreatorContract {
         require(now > (eventTime + 1 days), "One day has not past since start of ethent.");
-
         selfdestruct(owner);
     }
 
     function cancelEthent() public onlyCreatorContract {
-
         for(uint i = 0; i < atendees.length; i++){
             if(!signedIn[atendees[i]]){
                 atendees[i].transfer(weiToDeposit); 
@@ -146,7 +143,6 @@ contract EthentFactory {
 
     function createEthent(uint64 _maxAtendees, uint64 _weiToDeposit, 
                             address _toVerify, uint eventTime) public returns (address) {
-
         require(!paused, "Ethent creation is paused."); 
 
         Ethent ethent = new Ethent(_maxAtendees, _weiToDeposit, msg.sender, address(this), _toVerify, eventTime);
@@ -166,7 +162,6 @@ contract EthentFactory {
     }
     
     function removeEthent(address toRemove, bool cancelling) private {
-
         Ethent ethentToRemove = Ethent(toRemove);
         uint index = ethentLookup[toRemove]; 
 
